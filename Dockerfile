@@ -19,7 +19,7 @@ RUN --mount=type=secret,id=GLB_PORT \
     echo "GLB_PORT=$(cat /run/secrets/GLB_PORT)\n" >> .env && \
     echo "GLB_USERNAME=$(cat /run/secrets/GLB_USERNAME)\n" >> .env && \
     echo "GLB_PERSONAL_ACCESS_TOKEN=$(cat /run/secrets/GLB_PERSONAL_ACCESS_TOKEN)\n" >> .env && \
-    echo "GLB_BASE_URL$(cat /run/secrets/GLB_BASE_URL)\n" >> .env && \
+    echo "GLB_BASE_URL=$(cat /run/secrets/GLB_BASE_URL)\n" >> .env && \
     echo "GLB_APP_ID=$(cat /run/secrets/GLB_APP_ID)\n" >> .env && \
     echo "GLB_APP_SECRET=$(cat /run/secrets/GLB_APP_SECRET)\n" >> .env && \
     echo "GLB_BOT_OPEN_ID=$(cat /run/secrets/GLB_BOT_OPEN_ID)\n" >> .env
