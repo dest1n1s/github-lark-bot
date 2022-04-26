@@ -58,8 +58,8 @@ app.post('/lark', async (req, res) => {
   const encodedBody = JSON.parse(req.body.toString())
   const body = camelizeKeys(decrypt(encodedBody.encrypt))
   console.log(body)
-  larkManager.handle(body).then()
-  return res.send('Hello World!')
+  const response = await larkManager.handle(body)
+  return res.send(response)
 })
 
 await app.listen(config.port)
