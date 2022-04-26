@@ -69,6 +69,8 @@ class LarkManager {
         const repoRegexResult = /^([\w-+#]+\/[\w-+#]+)\/*$/.exec(regexResult[1])
         if (!repoRegexResult) return 'Invalid repository value!'
         const repo = repoRegexResult[1]
+        console.log('RepoListener: ')
+        console.log(this.repoListener)
         if (!this.repoListener[repo]) {
           this.repoListener[repo] = []
           const response = await github.createGithubWebhook(
