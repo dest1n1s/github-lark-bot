@@ -72,12 +72,17 @@ class LarkManager {
         console.log('RepoListener: ')
         console.log(this.repoListener)
         if (!this.repoListener[repo]) {
-          this.repoListener[repo] = []
-          const response = await github.createGithubWebhook(
-            `https://api.github.com/repos/${repo}/hooks`
-          )
-          console.log('Created Github Webhook: ')
-          console.log(response)
+          try {
+            const response = await github.createGithubWebhook(
+              `https://api.github.com/repos/${repo}/hooks`
+            )
+
+            this.repoListener[repo] = []
+            console.log('Created Github Webhook: ')
+            console.log(response)
+          } catch (e) {
+            console.log({ e })
+          }
         }
         this.repoListener[repo].push(message.chatId)
         return 'Successfully subscribed!'
