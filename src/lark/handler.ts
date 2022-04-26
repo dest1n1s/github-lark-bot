@@ -54,7 +54,6 @@ class LarkManager {
   }
   async handleMessageEvent(event: LarkMessageEvent) {
     const message = event.message
-    console.log('pass 0')
     if (
       message.chatType === 'group' &&
       message.mentions &&
@@ -72,7 +71,11 @@ class LarkManager {
         const repo = repoRegexResult[1]
         if (!this.repoListener[repo]) {
           this.repoListener[repo] = []
-          await github.createGithubWebhook(`https://api.github.com/repos/${repo}/hooks`)
+          const response = await github.createGithubWebhook(
+            `https://api.github.com/repos/${repo}/hooks`
+          )
+          console.log('Created Github Webhook: ')
+          console.log(response)
         }
         this.repoListener[repo].push(message.chatId)
         return 'Successfully subscribed!'
