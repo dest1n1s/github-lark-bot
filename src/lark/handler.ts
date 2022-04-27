@@ -82,8 +82,10 @@ class LarkManager {
             console.log(response)
           } catch (e) {
             console.log({ e })
+            return `Subscription failed with ${e.status}!`
           }
         }
+        if (this.repoListener[repo].find((v) => v === message.chatId)) return 'Already subscribed!'
         this.repoListener[repo].push(message.chatId)
         return 'Successfully subscribed!'
       }
