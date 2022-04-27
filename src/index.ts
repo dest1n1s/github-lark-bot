@@ -17,11 +17,11 @@ const app = express()
 await i18nInit()
 console.log(process.env)
 
-try {
-  await github.createGithubWebhook('https://api.github.com/repos/dest1n1s/TestHook/hooks')
-} catch (e) {
-  console.log(e)
-}
+// try {
+//   await github.createGithubWebhook('https://api.github.com/repos/dest1n1s/TestHook/hooks')
+// } catch (e) {
+//   console.log(e.response)
+// }
 
 await lark.refreshToken()
 

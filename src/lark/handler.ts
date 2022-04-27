@@ -81,8 +81,8 @@ class LarkManager {
             console.log('Created Github Webhook: ')
             console.log(response)
           } catch (e) {
-            console.log({ e })
-            return `Subscription failed with ${e.status}!`
+            console.log(e.response)
+            return `Subscription failed with ${e.response.status}!`
           }
         }
         if (this.repoListener[repo].find((v) => v === message.chatId)) return 'Already subscribed!'
