@@ -43,6 +43,14 @@ class LarkManager {
   constructor(botOpenId) {
     this.botOpenId = botOpenId
   }
+  async getChats(repo?: string) {
+    const hooks = await dataSource.getRepository(HookModel).find({
+      where: {
+        repo
+      }
+    })
+    return hooks.reduce((v: ChatModel[], hook) => [...v, ...hook.chats], [])
+  }
   async handle(body: any) {
     if (body.challenge) {
       return {

@@ -1,13 +1,11 @@
 import express from 'nanoexpress'
-import axios from 'axios'
 import { camelizeKeys } from './utils'
 import { handle } from './github/handler'
-import t, { i18nInit } from './i18n/i18n.config'
+import { i18nInit } from './i18n/i18n.config'
 
 import NodeMonkey from 'node-monkey'
 import decrypt from './decrypt'
 import lark from './lark'
-import github from './github'
 import larkManager from './lark/handler'
 import config from './config'
 import dataSource from './database/data-source'
@@ -38,13 +36,14 @@ app.post('/github', async (req, res) => {
   console.log(body)
   console.log(resData)
   if (resData) {
-    const repo: string = body.repository.fullName
-    for (const chatId of larkManager.repoListener[repo]) {
+    const repo = body.repository.fullName
+    const chats = await larkManager.getChats(repo)
+    for (const chat of chats) {
       lark
         .sendMessage('chat_id', {
           msgType: 'interactive',
           content: JSON.stringify(resData),
-          receiveId: chatId
+          receiveId: chat.chatId
         })
         .then()
     }
