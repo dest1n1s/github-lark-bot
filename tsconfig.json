@@ -12,6 +12,7 @@
     "sourceMap": true,
     "resolveJsonModule": true,
     "outDir": "dist",
+    "emitDecoratorMetadata": true,
     "lib": [
       "esnext",
       "dom"

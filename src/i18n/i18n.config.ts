@@ -1,5 +1,5 @@
 import i18next from 'i18next'
-import en from './locales/cn.json'
+import en from './locales/cn.json' assert { type: 'json' }
 
 export const i18nInit = async () =>
   i18next.init({

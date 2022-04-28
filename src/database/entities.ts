@@ -1,4 +1,4 @@
-import { Column, Entity, ManyToOne, OneToMany, PrimaryGeneratedColumn } from 'typeorm'
+import { Column, Entity, ManyToOne, OneToMany, PrimaryGeneratedColumn, Relation } from 'typeorm'
 
 @Entity()
 export class ChatModel {
@@ -8,8 +8,8 @@ export class ChatModel {
   @Column()
   chatId: string
 
-  @ManyToOne(() => HookModel, (hook) => hook.chats)
-  hook: HookModel
+  @ManyToOne('HookModel', 'chats')
+  hook: Relation<HookModel>
 
   constructor(chatId: string) {
     this.chatId = chatId
@@ -24,8 +24,8 @@ export class HookModel {
   @Column()
   repo: string
 
-  @OneToMany(() => ChatModel, (chat) => chat.hook)
-  chats: ChatModel[]
+  @OneToMany('ChatModel', 'hook')
+  chats: Relation<ChatModel>[]
 
   constructor(repo: string, chats: ChatModel[]) {
     this.repo = repo

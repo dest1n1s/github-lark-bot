@@ -1,4 +1,3 @@
-import 'reflect-metadata'
 import { DataSource } from 'typeorm'
 import { ChatModel, HookModel } from './entities'
 import config from '../config'
