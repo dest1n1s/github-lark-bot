@@ -47,8 +47,12 @@ class LarkManager {
     const hooks = await dataSource.getRepository(HookModel).find({
       where: {
         repo
+      },
+      relations: {
+        chats: true
       }
     })
+    console.log('Hooks: ', hooks)
     return hooks.reduce((v: ChatModel[], hook) => [...v, ...hook.chats], [])
   }
   async handle(body: any) {

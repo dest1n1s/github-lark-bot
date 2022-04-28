@@ -44,6 +44,7 @@ const main = async () => {
     if (resData) {
       const repo = body.repository.fullName
       const chats = await larkManager.getChats(repo)
+      console.log('Chats: ', chats)
       for (const chat of chats) {
         lark
           .sendMessage('chat_id', {
