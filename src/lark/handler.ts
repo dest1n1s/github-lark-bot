@@ -1,6 +1,8 @@
 import github from '../github'
 import lark from './index'
 import config from '../config'
+import dataSource from '../database/data-source'
+import { ChatModel, HookModel } from '../database/entities'
 
 interface LarkMessage {
   messageId: string
@@ -38,7 +40,6 @@ interface LarkMessageEvent {
 
 class LarkManager {
   botOpenId: string
-  repoListener: { [key: string]: string[] } = {}
   constructor(botOpenId) {
     this.botOpenId = botOpenId
   }
@@ -69,24 +70,39 @@ class LarkManager {
         const repoRegexResult = /^([\w-+#]+\/[\w-+#]+)\/*$/.exec(regexResult[1])
         if (!repoRegexResult) return 'Invalid repository value!'
         const repo = repoRegexResult[1]
-        console.log('RepoListener: ')
-        console.log(this.repoListener)
-        if (!this.repoListener[repo]) {
+        let hook = await dataSource.getRepository(HookModel).findOne({
+          where: {
+            repo
+          },
+          relations: {
+            chats: true
+          }
+        })
+        if (!hook) {
           try {
             const response = await github.createGithubWebhook(
               `https://api.github.com/repos/${repo}/hooks`
             )
 
-            this.repoListener[repo] = []
+            hook = new HookModel(repo, [])
+            await dataSource.manager.save(hook)
             console.log('Created Github Webhook: ')
             console.log(response)
           } catch (e) {
             console.log(e.response)
-            return `Subscription failed with ${e.response.status}!`
+            if (e.response.status === 422) {
+              hook = new HookModel(repo, [])
+              await dataSource.manager.save(hook)
+            } else {
+              return `Subscription failed with ${e.response.status}!`
+            }
           }
         }
-        if (this.repoListener[repo].find((v) => v === message.chatId)) return 'Already subscribed!'
-        this.repoListener[repo].push(message.chatId)
+        if (hook.chats.find((v) => v.chatId === message.chatId)) return 'Already subscribed!'
+        const chat = new ChatModel(message.chatId)
+        await dataSource.manager.save(chat)
+        hook.chats.push(chat)
+        await dataSource.manager.save(hook)
         return 'Successfully subscribed!'
       }
       const tests = [testSubscribe]

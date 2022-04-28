@@ -1,0 +1,33 @@
+services:
+  database:
+    image: mysql:8.0
+    container_name: github-lark-bot-database
+    networks:
+      - backend_lan
+    volumes:
+      - mysql-data:/var/lib/mysql
+    environment:
+      - MYSQL_ROOT_PASSWORD=${MYSQL_ROOT_PASSWORD}
+      - MYSQL_DATABASE=${MYSQL_DATABASE}
+  github-lark-bot:
+    image: dest1n1s/github-lark-bot
+    container_name: github-lark-bot
+    environment:
+      - GLB_PORT=${GLB_PORT}
+      - GLB_USERNAME=${GLB_USERNAME}
+      - GLB_PERSONAL_ACCESS_TOKEN=${GLB_PERSONAL_ACCESS_TOKEN}
+      - GLB_BASE_URL=${GLB_BASE_URL}
+      - GLB_APP_ID=${GLB_APP_ID}
+      - GLB_APP_SECRET=${GLB_APP_SECRET}
+      - GLB_BOT_OPEN_ID=${GLB_BOT_OPEN_ID}
+      - MYSQL_ROOT_PASSWORD=${MYSQL_ROOT_PASSWORD}
+      - MYSQL_DATABASE=${MYSQL_DATABASE}
+    ports:
+      - 3000:3000
+      - 50500:50500
+
+volumes:
+  mysql-data:
+
+networks:
+  backend_lan:

@@ -10,11 +10,13 @@ import lark from './lark'
 import github from './github'
 import larkManager from './lark/handler'
 import config from './config'
+import dataSource from './database/data-source'
 NodeMonkey()
 
 const app = express()
 
 await i18nInit()
+await dataSource.initialize()
 console.log(process.env)
 
 // try {

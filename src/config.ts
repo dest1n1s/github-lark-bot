@@ -5,5 +5,7 @@ export default {
   baseUrl: process.env.GLB_BASE_URL,
   appID: process.env.GLB_APP_ID,
   appSecret: process.env.GLB_APP_SECRET,
-  botOpenId: process.env.GLB_BOT_OPEN_ID
+  botOpenId: process.env.GLB_BOT_OPEN_ID,
+  database: process.env.MYSQL_DATABASE,
+  databaseRootPassword: process.env.MYSQL_ROOT_PASSWORD
 }
