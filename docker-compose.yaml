@@ -2,6 +2,8 @@ services:
   database:
     image: mysql:8.0
     container_name: github-lark-bot-database
+    command: mysqld --default-authentication-plugin=mysql_native_password
+    restart: always
     networks:
       - backend_lan
     volumes:
@@ -12,6 +14,8 @@ services:
   github-lark-bot:
     image: dest1n1/github-lark-bot
     container_name: github-lark-bot
+    networks:
+      - backend_lan
     environment:
       - GLB_PORT=${GLB_PORT}
       - GLB_USERNAME=${GLB_USERNAME}
