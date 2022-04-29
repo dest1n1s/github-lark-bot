@@ -138,7 +138,7 @@ class LarkManager {
         await dataSource.manager.save(hook)
         return 'Successfully unsubscribed!'
       }
-      const tests = [testSubscribe]
+      const tests = [testSubscribe, testUnsubscribe]
       for (const test of tests) {
         const res = await test(content.text)
         if (res) {
