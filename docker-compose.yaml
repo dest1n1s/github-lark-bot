@@ -14,6 +14,8 @@ services:
   github-lark-bot:
     image: dest1n1/github-lark-bot
     container_name: github-lark-bot
+    depends_on:
+      - database
     networks:
       - backend_lan
     environment:

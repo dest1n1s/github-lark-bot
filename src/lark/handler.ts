@@ -77,7 +77,7 @@ class LarkManager {
       const content: { text: string } = JSON.parse(message.content)
 
       const testSubscribe = async (text: string): Promise<string | null> => {
-        const regexResult = /^@_user_1 subscribe (\S+)$/.exec(text)
+        const regexResult = /^\s+@_user_1\s+subscribe\s+(\S+)$/.exec(text)
         if (!regexResult) return null
         const repoRegexResult = /^([\w-+#]+\/[\w-+#]+)\/*$/.exec(regexResult[1])
         if (!repoRegexResult) return 'Invalid repository value!'
@@ -116,6 +116,27 @@ class LarkManager {
         hook.chats.push(chat)
         await dataSource.manager.save(hook)
         return 'Successfully subscribed!'
+      }
+      const testUnsubscribe = async (text: string) => {
+        const regexResult = /^\s+@_user_1\s+subscribe\s+(\S+)$/.exec(text)
+        if (!regexResult) return null
+        const repoRegexResult = /^([\w-+#]+\/[\w-+#]+)\/*$/.exec(regexResult[1])
+        if (!repoRegexResult) return 'Invalid repository value!'
+        const repo = repoRegexResult[1]
+        const hook = await dataSource.getRepository(HookModel).findOne({
+          where: {
+            repo
+          },
+          relations: {
+            chats: true
+          }
+        })
+        if (!hook) return 'This repository has not been subscribed!'
+        if (!hook.chats.find((v) => v.chatId === message.chatId))
+          return 'This repository has not been subscribed in this chat!'
+        hook.chats = hook.chats.filter((v) => v.chatId !== message.chatId)
+        await dataSource.manager.save(hook)
+        return 'Successfully unsubscribed!'
       }
       const tests = [testSubscribe]
       for (const test of tests) {
