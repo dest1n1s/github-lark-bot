@@ -77,7 +77,7 @@ class LarkManager {
       const content: { text: string } = JSON.parse(message.content)
 
       const testSubscribe = async (text: string): Promise<string | null> => {
-        const regexResult = /^\s+@_user_1\s+subscribe\s+(\S+)$/.exec(text)
+        const regexResult = /^\s*@_user_1\s+subscribe\s+(\S+)\s*$/.exec(text)
         if (!regexResult) return null
         const repoRegexResult = /^([\w-+#]+\/[\w-+#]+)\/*$/.exec(regexResult[1])
         if (!repoRegexResult) return 'Invalid repository value!'
@@ -118,7 +118,7 @@ class LarkManager {
         return 'Successfully subscribed!'
       }
       const testUnsubscribe = async (text: string) => {
-        const regexResult = /^\s+@_user_1\s+subscribe\s+(\S+)$/.exec(text)
+        const regexResult = /^\s*@_user_1\s+unsubscribe\s+(\S+)\s*$/.exec(text)
         if (!regexResult) return null
         const repoRegexResult = /^([\w-+#]+\/[\w-+#]+)\/*$/.exec(regexResult[1])
         if (!repoRegexResult) return 'Invalid repository value!'
