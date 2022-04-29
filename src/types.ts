@@ -66,11 +66,13 @@ export interface PullRequest extends Issue {
   additions: number
   deletions: number
   changedFiles: number
+  merged: boolean
 }
 
 export interface PullRequestEventData {
   action:
     | 'assigned'
+    | 'merged'
     | 'auto_merge_disabled'
     | 'auto_merge_enabled'
     | 'closed'
@@ -98,6 +100,7 @@ export interface PullRequestEventData {
     }
   } | null
   assignee: User | null
+  sender: User
 }
 
 export interface IssuesEventData {

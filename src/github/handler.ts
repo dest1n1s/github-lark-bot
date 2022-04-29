@@ -1,4 +1,4 @@
-import { IssuesEventData, PullRequestEventData } from '../types'
+import { IssuesEventData, PullRequestEventData, User } from '../types'
 import t from '../i18n/i18n.config'
 
 export const handle = (eventType: string, data: any) => {
@@ -29,7 +29,7 @@ const handleIssue = (data: IssuesEventData) => {
     text: {
       content: `${t(`content.${data.action}`, {
         context: 'issue',
-        user: `[${data.issue.user.login}](${data.issue.user.htmlUrl})`,
+        user: `[${data.sender.login}](${data.sender.htmlUrl})`,
         assignee: `[@${data.assignee?.login}](${data.assignee?.htmlUrl})`
       })}\n**[#${data.issue.number} ${data.issue.title}](${data.issue.htmlUrl})**\n${
         data.issue.body || ''
@@ -93,6 +93,7 @@ const handleIssue = (data: IssuesEventData) => {
 }
 
 const handlePullRequest = (data: PullRequestEventData) => {
+  if (data.action === 'closed' && data.pullRequest.merged) data.action = 'merged'
   const config = {
     wide_screen_mode: true
   }
@@ -110,7 +111,7 @@ const handlePullRequest = (data: PullRequestEventData) => {
     text: {
       content: `${t(`content.${data.action}`, {
         context: 'pull_request',
-        user: `[${data.pullRequest.user.login}](${data.pullRequest.user.htmlUrl})`,
+        user: `[${data.sender.login}](${data.sender.htmlUrl})`,
         assignee: `[@${data.assignee?.login}](${data.assignee?.htmlUrl})`
       })}\n**[#${data.pullRequest.number} ${data.pullRequest.title}](${
         data.pullRequest.htmlUrl
@@ -121,7 +122,7 @@ const handlePullRequest = (data: PullRequestEventData) => {
   const branchFromTo = {
     tag: 'div',
     text: {
-      content: `From [${data.pullRequest.head.label}](${data.pullRequest.head.repo.htmlUrl}/trees/${data.pullRequest.head.ref}) to [${data.pullRequest.base.label}](${data.pullRequest.base.repo.htmlUrl}/trees/${data.pullRequest.base.ref})`,
+      content: `From [${data.pullRequest.head.label}](${data.pullRequest.head.repo.htmlUrl}/tree/${data.pullRequest.head.ref}) to [${data.pullRequest.base.label}](${data.pullRequest.base.repo.htmlUrl}/tree/${data.pullRequest.base.ref})`,
       tag: 'lark_md'
     }
   }
