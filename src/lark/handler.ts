@@ -141,6 +141,7 @@ class LarkManager {
       const tests = [testSubscribe, testUnsubscribe]
       for (const test of tests) {
         const res = await test(content.text)
+        console.log('Return Message: ', res)
         if (res) {
           return await lark.replyMessage(message.messageId, {
             content: JSON.stringify({ text: res }),
