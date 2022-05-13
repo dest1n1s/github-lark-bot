@@ -11,9 +11,11 @@
     "lint": "eslint --fix"
   },
   "dependencies": {
+    "@types/express": "^4.17.13",
     "axios": "^0.26.1",
     "crypto": "^1.0.1",
     "dotenv": "^16.0.0",
+    "express": "^5.0.0-beta1",
     "github-webhook-handler": "^1.0.0",
     "i18next": "^21.6.16",
     "lodash-es": "^4.17.21",

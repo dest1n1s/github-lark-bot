@@ -1,5 +1,5 @@
 import 'reflect-metadata'
-import express from 'nanoexpress'
+import express from 'express'
 import { camelizeKeys } from './utils'
 import { handle } from './github/handler'
 import { i18nInit } from './i18n/i18n.config'
@@ -10,6 +10,7 @@ import lark from './lark'
 import larkManager from './lark/handler'
 import config from './config'
 import dataSource from './database/data-source'
+import bodyParser from 'body-parser'
 
 const main = async () => {
   NodeMonkey()
@@ -31,6 +32,8 @@ const main = async () => {
 
   await lark.refreshToken()
 
+  app.use(bodyParser.json())
+
   app.get('/', (req, res) => {
     res.send('Hello World!')
   })
@@ -38,7 +41,7 @@ const main = async () => {
   app.post('/github', async (req, res) => {
     const body = camelizeKeys(JSON.parse(req.body.toString()))
     console.log(req.headers)
-    const resData = handle(req.headers['x-github-event'], body)
+    const resData = handle(req.get('x-github-event'), body)
     console.log(body)
     console.log(resData)
     if (resData) {
@@ -77,4 +80,14 @@ const main = async () => {
   await app.listen(config.port)
 }
 
-main().then()
+const mainLoop = async () => {
+  try {
+    await main()
+  } catch (e) {
+    console.log(e)
+    console.log('Restart after 60 seconds...')
+    setTimeout(mainLoop, 60000)
+  }
+}
+
+mainLoop().then()
