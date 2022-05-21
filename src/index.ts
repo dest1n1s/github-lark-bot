@@ -39,7 +39,8 @@ const main = async () => {
   })
 
   app.post('/github', async (req, res) => {
-    const body = camelizeKeys(JSON.parse(req.body.toString()))
+    console.log(req.body)
+    const body = camelizeKeys(req.body)
     console.log(req.headers)
     const resData = handle(req.get('x-github-event'), body)
     console.log(body)
@@ -70,7 +71,8 @@ const main = async () => {
   })
 
   app.post('/lark', async (req, res) => {
-    const encodedBody = JSON.parse(req.body.toString())
+    console.log(req.body)
+    const encodedBody = req.body
     const body = camelizeKeys(decrypt(encodedBody.encrypt))
     console.log(body)
     const response = await larkManager.handle(body)
